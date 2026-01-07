@@ -1,7 +1,7 @@
 {
-  "name": "EaglerForge Injector",
-  "short_name": "EaglerForge",
-  "description": "EaglerForge Injector for running Minecraft in your browser.",
+  "name": "Eaglercraft | Launcher",
+  "short_name": "Eaglercraft | Launcher",
+  "description": "Eaglercraft Launcher",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",

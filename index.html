@@ -3,90 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EaglerForge Injector</title>
-  
-  <!-- Link to the same favicon as client.html -->
+
+  <title>Eaglercraft | Launcher</title>
+
+  <!-- PWA favicon -->
   <link rel="icon" href="icon-192x192.png" type="image/png">
 
-  <!-- Link to the manifest file for PWA functionality -->
+  <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
 
-  <!-- Service Worker registration for PWA -->
+  <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js') // Ensure the correct path
-          .then((registration) => {
-            console.log('Service Worker registered with scope:', registration.scope);
-          })
-          .catch((error) => {
-            console.log('Service Worker registration failed:', error);
-          });
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.log('SW registration failed:', err));
       });
     }
   </script>
 
-  <!-- Dark Mode Styling -->
   <style>
-    /* Basic reset for the page */
-    body, html {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
+      min-height: 100vh;
       font-family: Arial, sans-serif;
-      color: #fff;
-      background-color: #121212;
-    }
-
-    h1 {
-      color: #ffffff;
-      text-align: center;
-      padding-top: 50px;
-    }
-
-    p {
-      color: #bbb;
-      text-align: center;
-      font-size: 16px;
-    }
-
-    /* Button Styling */
-    .run-button {
-      display: block;
-      margin: 20px auto;
-      padding: 15px 30px;
-      background-color: #007bff;
+      background: url("background.png") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       color: white;
-      font-size: 18px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
     }
 
-    .run-button:hover {
-      background-color: #0056b3;
+    .wrapper {
+      width: 90%;
+      max-width: 1100px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 42px;
+      font-weight: bold;
+      color: #7a2cff;
+      margin-bottom: 35px;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .box {
+      background-color: #7a2cff;
+      border-radius: 14px;
+      padding: 25px 20px;
+      color: white;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+      user-select: none;
+    }
+
+    .launch-btn {
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .launch-btn:hover {
+      transform: scale(1.06);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .download-btn {
+      margin-top: 12px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .download-btn:hover {
+      background: rgba(0, 0, 0, 0.55);
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Title of the page -->
-  <h1>EaglerForge Injector</h1>
-  <p>Click the "RUN EaglerForge" button below to load the EaglerForge Injector.</p>
+  <div class="wrapper">
+    <div class="title">Eaglercraft | Launcher</div>
 
-  <!-- RUN EaglerForge Button -->
-  <button class="run-button" id="runButton">RUN EaglerForge</button>
+    <div class="container">
 
-  <!-- Script to redirect to client.html when the button is clicked -->
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/EaglercraftX_1.8_u53_Offline_Signed.html')">Eaglercraft 1.8.8 (js)</div>
+        <div class="download-btn" onclick="download('mc/EaglercraftX_1.8_u53_Offline_Signed.html')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/EaglercraftX_1.8_WASM-GC_Offline_Download.html')">Eaglercraft 1.8.8 (WASM-GC)</div>
+        <div class="download-btn" onclick="download('mc/EaglercraftX_1.8_WASM-GC_Offline_Download.html')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/Eaglercraft_1.12_Offline_en_US.html')">Eaglercraft 1.12.2 (js)</div>
+        <div class="download-btn" onclick="download('mc/Eaglercraft_1.12_Offline_en_US.html')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/Eaglercraft_1.12.2_WASM_Offline_Download.html')">Eaglercraft 1.12.2 (WASM-GC)</div>
+        <div class="download-btn" onclick="download('mc/Eaglercraft_1.12.2_WASM_Offline_Download.html')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/client5.html')">Eaglercraft 1.5.2 (js)</div>
+        <div class="download-btn" onclick="download('mc/client5.zip')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/client6.html')">Eaglercraft 1.5.2 (WASM-GC)</div>
+        <div class="download-btn" onclick="download('mc/client6.zip')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/client7.html')">Client 7</div>
+        <div class="download-btn" onclick="download('mc/client7.zip')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/client8.html')">Client 8</div>
+        <div class="download-btn" onclick="download('mc/client8.zip')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/client9.html')">Client 9</div>
+        <div class="download-btn" onclick="download('mc/client9.zip')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/client10.html')">Client 10</div>
+        <div class="download-btn" onclick="download('mc/client10.zip')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/client11.html')">Client 11</div>
+        <div class="download-btn" onclick="download('mc/client11.zip')">Download</div>
+      </div>
+
+      <div class="box">
+        <div class="launch-btn" onclick="launch('mc/client12.html')">Client 12</div>
+        <div class="download-btn" onclick="download('mc/client12.zip')">Download</div>
+      </div>
+
+    </div>
+  </div>
+
   <script>
-    // Grab the button element
-    const runButton = document.getElementById('runButton');
+    function launch(path) {
+      window.location.href = path;
+    }
 
-    // Add an event listener to the button
-    runButton.addEventListener('click', () => {
-      // Redirect the user to client.html when the button is clicked
-      window.location.href = 'client.html';  // This will change the page to client.html
-    });
+    function download(path) {
+      const a = document.createElement('a');
+      a.href = path;
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   </script>
+
 </body>
 </html>
