@@ -1,185 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Eaglercraft | Launcher</title>
+<title>Eaglercraft | Launcher</title>
 
-  <!-- PWA favicon -->
-  <link rel="icon" href="icon-192x192.png" type="image/png">
+<link rel="icon" href="icon-192x192.png" type="image/png">
+<link rel="manifest" href="manifest.json">
 
-  <!-- Manifest -->
-  <link rel="manifest" href="manifest.json">
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
+</script>
 
-  <!-- Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(reg => console.log('Service Worker registered:', reg.scope))
-          .catch(err => console.log('SW registration failed:', err));
-      });
-    }
-  </script>
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: url("background.png") no-repeat center center fixed;
+  background-size: cover;
+  color: white;
+  padding: 30px 15px;
+}
 
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: url("background.png") no-repeat center center fixed;
-      background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-    }
+.title {
+  text-align: center;
+  font-size: 46px;
+  font-weight: bold;
+  color: #7a2cff;
+  margin-bottom: 40px;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+}
 
-    .wrapper {
-      width: 90%;
-      max-width: 1100px;
-      text-align: center;
-    }
+/* Version card */
+.version {
+  background: rgba(0,0,0,0.45);
+  border-radius: 18px;
+  padding: 25px;
+  margin-bottom: 35px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
 
-    .title {
-      font-size: 42px;
-      font-weight: bold;
-      color: #7a2cff;
-      margin-bottom: 35px;
-      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-    }
+.version-title {
+  font-size: 26px;
+  margin-bottom: 18px;
+  color: #e6d9ff;
+}
 
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
+/* Category pill */
+.category-title {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(122,44,255,0.35);
+  font-size: 14px;
+  margin-bottom: 14px;
+}
 
-    .box {
-      background-color: #7a2cff;
-      border-radius: 14px;
-      padding: 25px 20px;
-      color: white;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
-      user-select: none;
-    }
+/* Client grid */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 25px;
+}
 
-    .launch-btn {
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 14px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.15);
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
+.box {
+  background: linear-gradient(135deg, #7a2cff, #5b1fd1);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+}
 
-    .launch-btn:hover {
-      transform: scale(1.06);
-      background: rgba(255, 255, 255, 0.25);
-    }
+.launch-btn {
+  font-weight: bold;
+  cursor: pointer;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.15);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
 
-    .download-btn {
-      margin-top: 12px;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      background: rgba(0, 0, 0, 0.35);
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
+.launch-btn:hover {
+  transform: scale(1.06);
+  background: rgba(255,255,255,0.25);
+}
 
-    .download-btn:hover {
-      background: rgba(0, 0, 0, 0.55);
-    }
-  </style>
+.download-btn {
+  margin-top: 12px;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.35);
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  background: rgba(0,0,0,0.55);
+}
+</style>
 </head>
 
 <body>
 
-  <div class="wrapper">
-    <div class="title">Eaglercraft | Launcher</div>
+<div class="title">Eaglercraft Launcher</div>
+<div id="launcher"></div>
 
-    <div class="container">
+<script>
+/* ========= CLIENT CONFIG ========= */
+/* Add new clients ONLY here */
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/EaglercraftX_1.8_u53_Offline_Signed.html')">Eaglercraft 1.8.8 (js)</div>
-        <div class="download-btn" onclick="download('mc/EaglercraftX_1.8_u53_Offline_Signed.html')">Download</div>
-      </div>
+const clients = {
+  "Minecraft 1.8.8": {
+    base: [
+      {
+        name: "1.8.8 (JS)",
+        launch: "mc/EaglercraftX_1.8_u53_Offline_Signed.html",
+        download: "mc/EaglercraftX_1.8_u53_Offline_Signed.html"
+      },
+      {
+        name: "1.8.8 (WASM-GC)",
+        launch: "mc/EaglercraftX_1.8_WASM-GC_Offline_Download.html",
+        download: "mc/EaglercraftX_1.8_WASM-GC_Offline_Download.html"
+      }
+    ],
+    modded: []
+  },
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/EaglercraftX_1.8_WASM-GC_Offline_Download.html')">Eaglercraft 1.8.8 (WASM-GC)</div>
-        <div class="download-btn" onclick="download('mc/EaglercraftX_1.8_WASM-GC_Offline_Download.html')">Download</div>
-      </div>
+  "Minecraft 1.12.2": {
+    base: [
+      {
+        name: "1.12.2 (JS)",
+        launch: "mc/Eaglercraft_1.12_Offline_en_US.html",
+        download: "mc/Eaglercraft_1.12_Offline_en_US.html"
+      },
+      {
+        name: "1.12.2 (WASM-GC)",
+        launch: "mc/Eaglercraft_1.12.2_WASM_Offline_Download.html",
+        download: "mc/Eaglercraft_1.12.2_WASM_Offline_Download.html"
+      }
+    ],
+    modded: []
+  },
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/Eaglercraft_1.12_Offline_en_US.html')">Eaglercraft 1.12.2 (js)</div>
-        <div class="download-btn" onclick="download('mc/Eaglercraft_1.12_Offline_en_US.html')">Download</div>
-      </div>
+  "Minecraft 1.5.2": {
+    base: [
+      {
+        name: "1.5.2 (JS)",
+        launch: "mc/eaglercraft.1.5.2.html",
+        download: "mc/eaglercraft.1.5.2.html"
+      }
+    ],
+    modded: []
+  },
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/Eaglercraft_1.12.2_WASM_Offline_Download.html')">Eaglercraft 1.12.2 (WASM-GC)</div>
-        <div class="download-btn" onclick="download('mc/Eaglercraft_1.12.2_WASM_Offline_Download.html')">Download</div>
-      </div>
+  "Other Versions": {
+    base: [
+      {
+        name: "Client 6",
+        launch: "mc/client6.html",
+        download: "mc/client6.zip"
+      }
+    ],
+    modded: []
+  }
+};
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/eaglercraft.1.5.2.html')">Eaglercraft 1.5.2 (js)</div>
-        <div class="download-btn" onclick="download('mc/eaglercraft.1.5.2.html')">Download</div>
-      </div>
+/* ========= RENDER LOGIC ========= */
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/client6.html')">client 6</div>
-        <div class="download-btn" onclick="download('mc/client6.zip')">Download</div>
-      </div>
+const launcher = document.getElementById("launcher");
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/client7.html')">Client 7</div>
-        <div class="download-btn" onclick="download('mc/client7.zip')">Download</div>
-      </div>
+for (const [version, groups] of Object.entries(clients)) {
+  const section = document.createElement("div");
+  section.className = "version";
+  section.innerHTML = `<div class="version-title">${version}</div>`;
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/client8.html')">Client 8</div>
-        <div class="download-btn" onclick="download('mc/client8.zip')">Download</div>
-      </div>
+  for (const [type, list] of Object.entries(groups)) {
+    if (!list.length) continue;
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/client9.html')">Client 9</div>
-        <div class="download-btn" onclick="download('mc/client9.zip')">Download</div>
-      </div>
+    section.innerHTML += `<div class="category-title">${type.toUpperCase()}</div>`;
+    const grid = document.createElement("div");
+    grid.className = "container";
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/client10.html')">Client 10</div>
-        <div class="download-btn" onclick="download('mc/client10.zip')">Download</div>
-      </div>
+    list.forEach(c => {
+      const box = document.createElement("div");
+      box.className = "box";
+      box.innerHTML = `
+        <div class="launch-btn" onclick="launch('${c.launch}')">${c.name}</div>
+        <div class="download-btn" onclick="download('${c.download}')">Download</div>
+      `;
+      grid.appendChild(box);
+    });
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/client11.html')">Client 11</div>
-        <div class="download-btn" onclick="download('mc/client11.zip')">Download</div>
-      </div>
+    section.appendChild(grid);
+  }
 
-      <div class="box">
-        <div class="launch-btn" onclick="launch('mc/client12.html')">Client 12</div>
-        <div class="download-btn" onclick="download('mc/client12.zip')">Download</div>
-      </div>
+  launcher.appendChild(section);
+}
 
-    </div>
-  </div>
+function launch(path) {
+  window.location.href = path;
+}
 
-  <script>
-    function launch(path) {
-      window.location.href = path;
-    }
-
-    function download(path) {
-      const a = document.createElement('a');
-      a.href = path;
-      a.download = '';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  </script>
+function download(path) {
+  const a = document.createElement("a");
+  a.href = path;
+  a.download = "";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+</script>
 
 </body>
 </html>
